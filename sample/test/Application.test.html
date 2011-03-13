@@ -1,0 +1,8 @@
+
+*{ This runs the inline Coffee tests. }*
+#{selenium}
+    // Just open the test page and see if it displays "Test Passed"
+    open('@{Application.inline()}')
+    assertNotTitle('Application error')
+    assertTextPresent('All tests passed')
+#{/selenium}
