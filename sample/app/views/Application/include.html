@@ -1,0 +1,10 @@
+#{extends 'main.html' /}
+#{set title:'Included Coffee test' /}
+
+<h1>Testing included coffee</h1>
+
+<p>This page tests included coffee by using it to set text in the cells below.</p>
+
+#{include 'Application/harness.html'/}
+
+<script type="text/javascript" src="@{'/public/javascripts/tests.coffee'}"></script>

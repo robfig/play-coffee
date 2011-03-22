@@ -101,4 +101,4 @@ The module directly handles this request and compiles the coffee on the fly.
 ## Known issues
 
 1. It is currently impossible to use String interpolation in Inline Coffee (since the Play! template syntax clashes, and it is evaluated first)
-2. Coffee compilation errors presently write their error message in place of the compiled javascript.  Instead, they should result in a helpful error page (showing the offending line of code)just like other errors.
+

@@ -1,14 +1,3 @@
-#{extends 'main.html' /}
-#{set title:'Inline Coffee test' /}
-
-<h1>Testing inline coffee</h1>
-
-<p>This page tests inline coffee by using it to set text in the cells below.</p>
-
-#{include 'Application/harness.html'/}
-
-#{coffee.inline}
-
 # Access the test result cell.
 test = 1
 answer = (ans) -> $('#actual-' + test++).text ans
@@ -45,4 +34,3 @@ cubes = (math.cube num for num in list)
 answer cubes[4]
 
 window.checkAnswers()
-#{/}
