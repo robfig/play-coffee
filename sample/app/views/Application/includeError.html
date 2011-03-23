@@ -1,0 +1,13 @@
+#{extends 'main.html' /}
+#{set title:'Included Coffee compile error' /}
+
+<h1>There is an error in the included coffee file.</h1>
+
+<p>It is surfaced to the developer in the following ways:</p>
+<ul>
+  <li>Log something to the console</li>
+  <li>Return 500 from the request (which shows up in the Javascript console)</li>
+  <li>If they visit the resource <a href="@{'/public/javascripts/error.coffee'}">directly</a>, they will see the full compilation error.</li>
+</ul>
+
+<script type="text/javascript" src="@{'/public/javascripts/error.coffee'}"></script>

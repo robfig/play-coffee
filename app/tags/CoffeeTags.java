@@ -7,6 +7,8 @@ import groovy.lang.Closure;
 
 import java.io.PrintWriter;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import play.exceptions.TemplateExecutionException;
 import play.templates.FastTags.Namespace;
@@ -21,6 +23,9 @@ import play.templates.Template;
 @Namespace("coffee")
 public class CoffeeTags extends FastTags {
 
+    // Regex to get the line number of the failure.
+    private static final Pattern LINE_NUMBER = Pattern.compile("line ([0-9]+)");
+
     public static void _inline(Map<?, ?> args,
                                Closure body,
                                PrintWriter out,
@@ -29,18 +34,19 @@ public class CoffeeTags extends FastTags {
         String coffee = JavaExtensions.toString(body);
         try {
             String js = new JCoffeeScriptCompiler().compile(coffee);
-            out.print("<script>\n");
+            out.print("<script type=\"text/javascript\">\n");
             out.print(js);
             out.print("</script>");
         } catch (JCoffeeScriptCompileException e) {
             // Show a nice compilation error message.
             // All of the exceptions say "(Type of error) on line 54: (Error detail)"
             play.Logger.error(e, "Coffee compilation error");
-            String error = e.getMessage();
-            int i = error.indexOf("line ");
-            int coffeeLine = Integer.parseInt(error.substring(i + 5, error.indexOf(":", i)));
+            Matcher m = LINE_NUMBER.matcher(e.getMessage());
+            if (m.find()) {
+                fromLine += Integer.parseInt(m.group(1));
+            }
             throw new TemplateExecutionException(
-                template.template, fromLine + coffeeLine, e.getMessage(), e);
+                template.template, fromLine, e.getMessage(), e);
         }
     }
 }

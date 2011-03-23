@@ -43,7 +43,7 @@ public class CoffeePlugin extends PlayPlugin {
                 response.cacheFor("1h");
             }
             response.print(compiler.compile(file.contentAsString()));
-        } catch(Exception e) {
+        } catch (JCoffeeScriptCompileException e) {
             response.contentType = "text/javascript";
             response.status = 500;
             response.print("Oops,\n");
