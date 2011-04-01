@@ -35,8 +35,11 @@ public class CoffeePlugin extends PlayPlugin {
 
     // Regex to get the line number of the failure.
     private static final Pattern LINE_NUMBER = Pattern.compile("line ([0-9]+)");
+    private static final ThreadLocal<JCoffeeScriptCompiler> compiler =
+        new ThreadLocal<JCoffeeScriptCompiler>() {
+            @Override protected JCoffeeScriptCompiler initialValue() {
+                return new JCoffeeScriptCompiler(); }};
     private Map<String, CompiledCoffee> cache;  // Map of Relative Path -> Compiled coffee
-    private JCoffeeScriptCompiler compiler;
 
     /** @return the line number that the exception happened on, or 0 if not found in the message. */
     public static int getLineNumber(JCoffeeScriptCompileException e) {
@@ -47,9 +50,12 @@ public class CoffeePlugin extends PlayPlugin {
         return 0;
     }
 
+    public static JCoffeeScriptCompiler getCompiler() {
+        return compiler.get();
+    }
+
     @Override
     public void onLoad() {
-        compiler = new JCoffeeScriptCompiler();
         cache = new HashMap<String, CompiledCoffee>();
     }
 
@@ -75,7 +81,7 @@ public class CoffeePlugin extends PlayPlugin {
             }
 
             // Compile the coffee and return.
-            String compiledCoffee = compiler.compile(file.contentAsString());
+            String compiledCoffee = getCompiler().compile(file.contentAsString());
             cache.put(relativePath, new CompiledCoffee(file.lastModified(), compiledCoffee));
             response.print(compiledCoffee);
         } catch (JCoffeeScriptCompileException e) {

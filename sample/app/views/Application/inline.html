@@ -44,5 +44,17 @@ race 'a', 'b', 'c'
 cubes = (math.cube num for num in list)
 answer cubes[4]
 
+# Test 7: String interpolation and multiline strings
+answer "Five cubed
+ is #\{cubes[4]}."
+
+# Test 8: Include Play! template directives
+#{if false}
+answer 'fail'
+#{/}
+#{else}
+answer 'success'
+#{/}
+
 window.checkAnswers()
 #{/}

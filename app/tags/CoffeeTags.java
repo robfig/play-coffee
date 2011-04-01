@@ -27,9 +27,10 @@ public class CoffeeTags extends FastTags {
                                PrintWriter out,
                                ExecutableTemplate template,
                                int fromLine) {
-        String coffee = JavaExtensions.toString(body);
+        String coffee = JavaExtensions.toString(body)
+            .replace("#\\{", "#{");  // String interpolation
         try {
-            String js = new JCoffeeScriptCompiler().compile(coffee);
+            String js = CoffeePlugin.getCompiler().compile(coffee);
             out.print("<script type=\"text/javascript\">\n");
             out.print(js);
             out.print("</script>");
