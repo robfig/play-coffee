@@ -23,9 +23,19 @@ import play.vfs.VirtualFile;
  */
 public class CoffeePlugin extends PlayPlugin {
 
+    private static final class CompiledCoffee {
+        public final Long sourceLastModified;  // Last modified time of the VirtualFile
+        public final String output;  // Compiled coffee
+
+        public CompiledCoffee(Long sourceLastModified, String output) {
+            this.sourceLastModified = sourceLastModified;
+            this.output = output;
+        }
+    }
+
     // Regex to get the line number of the failure.
     private static final Pattern LINE_NUMBER = Pattern.compile("line ([0-9]+)");
-
+    private Map<String, CompiledCoffee> cache;  // Map of Relative Path -> Compiled coffee
     private JCoffeeScriptCompiler compiler;
 
     /** @return the line number that the exception happened on, or 0 if not found in the message. */
@@ -40,6 +50,7 @@ public class CoffeePlugin extends PlayPlugin {
     @Override
     public void onLoad() {
         compiler = new JCoffeeScriptCompiler();
+        cache = new HashMap<String, CompiledCoffee>();
     }
 
     @Override
@@ -54,7 +65,19 @@ public class CoffeePlugin extends PlayPlugin {
             if (Play.mode == Play.Mode.PROD) {
                 response.cacheFor("1h");
             }
-            response.print(compiler.compile(file.contentAsString()));
+
+            // Check the cache.
+            String relativePath = file.relativePath();
+            CompiledCoffee cc = cache.get(relativePath);
+            if (cc != null && cc.sourceLastModified.equals(file.lastModified())) {
+                response.print(cc.output);
+                return true;
+            }
+
+            // Compile the coffee and return.
+            String compiledCoffee = compiler.compile(file.contentAsString());
+            cache.put(relativePath, new CompiledCoffee(file.lastModified(), compiledCoffee));
+            response.print(compiledCoffee);
         } catch (JCoffeeScriptCompileException e) {
             // Render a nice error page.
             Template tmpl = TemplateLoader.load("errors/500.html");
