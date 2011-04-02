@@ -91,6 +91,18 @@ In production mode, a cache header is also set telling the client to cache the f
 
 A compilation error in an included file will cause the error to be logged and will return 500.  If the developer visits the resource link directly, he can see the useful compilation error screen showing the offending line.
 
+## Getting started
+
+This module is not yet on www.playframework.org.  
+
+To use it in your Play! project:
+
+1. Clone it into your play/modules directory
+2. Run 'play build-module' in play/modules/play-coffee
+3. Add the module to your application.conf / dependencies.yml file.
+
+The *sample* application included in the module exercises all of the functionality in the module, making it a good reference.  It may be run by running 'play test' in the 'play-coffee/sample' directory.
+
 ## Feedback welcome. 
 
 All feedback is very welcome.  Feel free to create Issues for feature requests or bugs.  
