@@ -121,13 +121,12 @@ A compilation error in an included file will cause the error to be logged and wi
 
 ## Getting started
 
-This module is not yet on www.playframework.org.  
+This module is on www.playframework.org, so follow the usual steps.  
 
 To use it in your Play! project:
 
-1. Clone it into your play/modules directory
-2. Run 'play build-module' in play/modules/play-coffee
-3. Add the module to your application.conf / dependencies.yml file.
+1. Add `- play -> coffee 1.0` in your dependencies.yml.
+2. Run 'play dependencies' in your app's directory to download it.
 
 The *sample* application included in the module exercises all of the functionality in the module, making it a good reference.  It may be run by running 'play test' in the 'play-coffee/sample' directory.
 
