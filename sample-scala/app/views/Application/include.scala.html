@@ -1,0 +1,11 @@
+@main("Included Coffee test") {
+
+<h1>Testing included coffee</h1>
+
+<p>This page tests included coffee by using it to set text in the cells below.</p>
+
+@views.Application.html.harness()
+
+<script type="text/javascript" src="@asset("/public/javascripts/tests.coffee")"></script>
+
+}

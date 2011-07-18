@@ -1,0 +1,33 @@
+@import tags.coffee
+
+<table id="test-table">
+  <tr><th>Expected value</th><th>Actual value</th><th>Result</th></tr>
+  @for((t, i) <- List("42", "4", "5", "64", "[\"b\",\"c\"]", "125", "Five cubed is 125.", "success").zipWithIndex) {
+    <tr>
+      <td id="expected-@{i+1}">@t</td>
+      <td id="actual-@{i+1}"></td>
+      <td id="result-@{i+1}"></td>
+    </tr>
+  }
+</table>
+
+<p id="num-tests"></span>
+<p id="result">Tests running</span>
+
+@coffee.inline() {
+
+window.checkAnswers = ->
+  # See if the test passed.
+  num_tests = $('#test-table tr').length - 1
+  $('#num-tests').text num_tests + ' tests found.'
+  passed = true
+  for i in [1..num_tests]
+    r = $('#expected-' + i).text() == $('#actual-' + i).text()
+    result_string = if r then 'Passed' else 'Failed'
+    $('#result-' + i).text result_string
+    console.log 'Test ' + i + ' ' + result_string
+    passed &= r
+
+  $('#result').text (if passed then 'All tests passed' else 'Failure')
+
+}
