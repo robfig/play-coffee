@@ -21,11 +21,11 @@ window.checkAnswers = ->
   passed = true
   for i in [1..num_tests]
     r = $('#expected-' + i).text == $('#actual-' + i).text
-    result_string = if r? then 'Passed' else 'Failed'
+    result_string = if r then 'Passed' else 'Failed'
     $('#result-' + i).text result_string
     console.log 'Test ' + i + ' ' + result_string
     passed &= r
 
-  $('#result').text (if passed? then 'All tests passed' else 'Failure')
+  $('#result').text (if passed then 'All tests passed' else 'Failure')
 
 #{/}
