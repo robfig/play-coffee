@@ -6,11 +6,11 @@
 
 ## Objective
 
-The goal is to make [CoffeeScript](http://jashkenas.github.com/coffee-script/) frictionless to use with [Play!](http://www.playframework.org) web framework.
+The goal is to make [CoffeeScript](http://jashkenas.github.com/coffee-script/) frictionless to use with [Play!](http://www.playframework.org) web framework, including both flavors (Java and Scala).
 
 ## Overview 
 
-This module integrates [Play!](http://www.playframework.org) with [Coffee script](http://jashkenas.github.com/coffee-script/).  It uses [JCoffeeScript](https://github.com/yeungda/jcoffeescript) to run the Coffee compiler (which is written in Coffee) on [Rhino](http://www.mozilla.org/rhino/).
+This module integrates [Play!](http://www.playframework.org) with [Coffee script](http://jashkenas.github.com/coffee-script/).  It uses [JCoffeeScript](https://github.com/yeungda/jcoffeescript) to run the Coffee compiler (which is written in Coffee) on [Rhino](http://www.mozilla.org/rhino/).  It provides both Java and Scala support.
 
 This module provides two ways to write Coffee: 
 
@@ -21,13 +21,24 @@ This module provides two ways to write Coffee:
 
 You can write Coffee script directly in your Play! templates using the `#{coffee.inline}` tag.
 
-For example:
+For example (Java):
+
     #{coffee.inline}
     # Array comprehensions:
     cubes = (math.cube num for num in [1, 2, 3])
     #{/}
 
+or (Scala): 
+
+    @import tags.coffee
+
+    @coffee.inline() {
+    # Array comprehensions:
+    cubes = (math.cube num for num in [1, 2, 3])
+    }
+
 will produce the compiled javascript directly into your page:
+
     <script type="text/javascript">
     (function() {
       var cubes;
@@ -43,11 +54,12 @@ will produce the compiled javascript directly into your page:
     }).call(this);
     </script>
 
-### String interpolation
+### String interpolation (Java only)
 
-To use Coffee string interpolation, the syntax `#\{variable}` must be used.  This is to differentiate it from Play! tags.  
+Both CoffeeScript and Groovy templates use the syntax `#{...}`.  To differentiate them, use the syntax `#\{variable}` when you want inline Coffee string interpolation.  Note that this is only necessary when using inline Coffee in Groovy templates.  In other contexts, the usual syntax should be followed.
 
 For example:
+
     #{coffee.inline}
     x = 5
     y = 8
@@ -56,15 +68,26 @@ For example:
 
 ### Play! tags
 
-All the usual Play! tags may be used within your Coffee.
+All of the usual Play! tags may be used within your Coffee.
 
 For example:
+
     #{coffee.inline}
     query = "${query.raw()}"
     #{if logQuery} 
     console.log "The query was #\{query}"
     #{/if}
     #{/}
+
+or (Scala):
+
+    @coffee.inline() {
+    query = "@query.raw"
+    @if (logQuery) { 
+    console.log "The query was #\{query}"
+    }
+    }
+
 
 ### Compilation errors
 
@@ -74,8 +97,13 @@ If there is an error compiling your Coffee, a 500 will be returned, and in devel
 
 You can also write your Coffee in a separate file, including it via a script tag.
 
-For example,
+For example (Java),
+
     <script type="text/javascript" href="@{'/public/javascripts/sample.coffee'}"></script>
+
+or (Scala),
+
+    <script type="text/javascript" href="@asset("/public/javascripts/sample.coffee")"></script>
 
 The module handles the request and compiles the coffee on the fly.  
 
@@ -102,6 +130,8 @@ To use it in your Play! project:
 3. Add the module to your application.conf / dependencies.yml file.
 
 The *sample* application included in the module exercises all of the functionality in the module, making it a good reference.  It may be run by running 'play test' in the 'play-coffee/sample' directory.
+
+A *sample-scala* application is also included, to demonstrate and test usage with the Scala module.
 
 ## Feedback welcome. 
 
