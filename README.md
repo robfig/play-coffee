@@ -99,11 +99,11 @@ You can also write your Coffee in a separate file, including it via a script tag
 
 For example (Java),
 
-    <script type="text/javascript" href="@{'/public/javascripts/sample.coffee'}"></script>
+    <script type="text/javascript" src="@{'/public/javascripts/sample.coffee'}"></script>
 
 or (Scala),
 
-    <script type="text/javascript" href="@asset("/public/javascripts/sample.coffee")"></script>
+    <script type="text/javascript" src="@asset("/public/javascripts/sample.coffee")"></script>
 
 The module handles the request and compiles the coffee on the fly.  
 
